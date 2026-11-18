@@ -1,0 +1,28 @@
+{
+  "format_version": 1,
+  "description": "Fictional test fixtures for Support Intake & Triage and Booking Sync & Replay. Use expected outputs only for evaluation. Each case begins with a clean store. Events listed within one case share the store.",
+  "accounts": ["A1", "A2"],
+  "categories": ["access", "billing", "booking", "general"],
+  "triage": [
+    {"id":"T01","split":"development","events":[{"event_id":"E01","account_id":"A1","message":"I cannot sign in."}],"expected":{"category":"access","state":"drafted","draft_count":1}},
+    {"id":"T02","split":"development","events":[{"event_id":"E02","account_id":"A1","message":"Where can I find my invoice?"}],"expected":{"category":"billing","state":"drafted","draft_count":1}},
+    {"id":"T03","split":"development","events":[{"event_id":"E03","account_id":"A2","message":"Can I move my booking to a different date?"}],"expected":{"category":"booking","state":"drafted","draft_count":1}},
+    {"id":"T04","split":"development","events":[{"event_id":"E04","account_id":"A2","message":"What hours is your help desk available?"}],"expected":{"category":"general","state":"drafted","draft_count":1}},
+    {"id":"T05","split":"development","events":[{"event_id":"E05","account_id":"UNKNOWN","message":"I need my invoice."}],"expected":{"category":null,"state":"review","draft_count":0,"reason":"unknown_account"}},
+    {"id":"T06","split":"development","events":[{"event_id":"E06","account_id":"A1","message":" "}],"expected":{"category":null,"state":"invalid","draft_count":0,"reason":"invalid_message"}},
+    {"id":"T07","split":"development","events":[{"event_id":"E07","account_id":"A2","message":"I forgot my login.","dependency":"timeout"}],"expected":{"category":null,"state":"review","draft_count":0,"reason":"lookup_unavailable"}},
+    {"id":"T08","split":"development","events":[{"event_id":"E08","account_id":"A1","message":"I cannot sign in."},{"event_id":"E08","account_id":"A1","message":"I cannot sign in."}],"expected":{"category":"access","state":"drafted","draft_count":1}},
+    {"id":"T09","split":"holdout","events":[{"event_id":"E09","account_id":"A2","message":"I see a charge I did not authorise."}],"expected":{"category":"billing","state":"review","draft_count":0,"reason":"billing_dispute"}},
+    {"id":"T10","split":"holdout","events":[{"event_id":"E10","account_id":"A1","message":"Something is wrong."}],"expected":{"category":null,"state":"review","draft_count":0,"reason":"ambiguous"}},
+    {"id":"T11","split":"holdout","events":[{"event_id":"E11","account_id":"A1","message":"Could I shift my reservation to Friday?"}],"expected":{"category":"booking","state":"drafted","draft_count":1}},
+    {"id":"T12","split":"holdout","events":[{"event_id":"E12","account_id":"A2","message":"How can I get a copy of my bill?","classifier":"malformed_response"}],"expected":{"category":null,"state":"review","draft_count":0,"reason":"invalid_model_output"}}
+  ],
+  "booking_sync": [
+    {"id":"B01","initial_version":1,"events":[{"event_id":"R01","version":2,"approved":true,"target_behavior":"ok"}],"expected":{"state":"delivered","target_writes":1,"target_version":2}},
+    {"id":"B02","initial_version":1,"events":[{"event_id":"R02","version":2,"approved":false,"target_behavior":"ok"}],"expected":{"state":"unapproved","target_writes":0,"target_version":1}},
+    {"id":"B03","initial_version":1,"events":[{"event_id":"R03","version":2,"approved":true,"target_behavior":"ok"},{"event_id":"R03","version":2,"approved":true,"target_behavior":"ok"}],"expected":{"state":"delivered","target_writes":1,"target_version":2}},
+    {"id":"B04","initial_version":3,"events":[{"event_id":"R04","version":2,"approved":true,"target_behavior":"ok"}],"expected":{"state":"stale","target_writes":0,"target_version":3}},
+    {"id":"B05","initial_version":1,"events":[{"event_id":"R05","version":2,"approved":true,"target_behavior":"commits_then_times_out"}],"expected":{"state":"reconciled","target_writes":1,"target_version":2}},
+    {"id":"B06","initial_version":1,"events":[{"event_id":"R06","version":2,"approved":true,"target_behavior":"rate_limited_until_retry_budget_exhausted"}],"expected":{"state":"awaiting_operator","target_writes":0,"target_version":1}}
+  ]
+}

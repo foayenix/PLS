@@ -1,0 +1,714 @@
+{
+  "format_version": 1,
+  "description": "Fictional credit-control evaluation data. Outcomes are training labels, not real financial policy.",
+  "policy_version": "demo-v1",
+  "policy": [
+    {
+      "id": "P1",
+      "text": "A unique exact match supports an allocation recommendation. A unique partial payment supports a partial allocation recommendation and an open balance. Record both values."
+    },
+    {
+      "id": "P2",
+      "text": "A missing, unmatched or ambiguous reference requires review. A reference that points to multiple eligible invoices must show all candidates. The proposed allocation stays pending."
+    },
+    {
+      "id": "P3",
+      "text": "Disputed or closed invoices, mismatched currency and conflicting customer IDs require review. Check these conditions before comparing the amount to the open balance. Overpayments also require review."
+    },
+    {
+      "id": "P4",
+      "text": "A duplicate payment event requires review. A failed lookup leaves the case pending and requires review."
+    },
+    {
+      "id": "P5",
+      "text": "Zero or negative received amounts require review as invalid input. A new policy section can be used only when it is the active version."
+    }
+  ],
+  "ledger": [
+    {
+      "invoice_id": "I-101",
+      "reference": "R-101",
+      "open_pence": 10000,
+      "customer_id": "C1",
+      "status": "open",
+      "currency": "GBP"
+    },
+    {
+      "invoice_id": "I-201",
+      "reference": "R-200",
+      "open_pence": 8000,
+      "customer_id": "C1",
+      "status": "open",
+      "currency": "GBP"
+    },
+    {
+      "invoice_id": "I-202",
+      "reference": "R-200",
+      "open_pence": 8000,
+      "customer_id": "C2",
+      "status": "open",
+      "currency": "GBP"
+    },
+    {
+      "invoice_id": "I-301",
+      "reference": "R-301",
+      "open_pence": 12500,
+      "customer_id": "C2",
+      "status": "open",
+      "currency": "GBP"
+    },
+    {
+      "invoice_id": "I-401",
+      "reference": "R-401",
+      "open_pence": 5000,
+      "customer_id": "C2",
+      "status": "disputed",
+      "currency": "GBP"
+    },
+    {
+      "invoice_id": "I-501",
+      "reference": "R-501",
+      "open_pence": 0,
+      "customer_id": "C3",
+      "status": "closed",
+      "currency": "GBP"
+    },
+    {
+      "invoice_id": "I-601",
+      "reference": "R-601",
+      "open_pence": 199,
+      "customer_id": "C4",
+      "status": "open",
+      "currency": "GBP"
+    },
+    {
+      "invoice_id": "I-701",
+      "reference": "R-701",
+      "open_pence": 9000,
+      "customer_id": "C3",
+      "status": "open",
+      "currency": "GBP"
+    },
+    {
+      "invoice_id": "I-801",
+      "reference": "R-801",
+      "open_pence": 3800,
+      "customer_id": "C4",
+      "status": "open",
+      "currency": "GBP"
+    }
+  ],
+  "cases": [
+    {
+      "id": "A01",
+      "split": "development",
+      "input": {
+        "reference": "R-101",
+        "received_pence": 10000,
+        "currency": "GBP",
+        "customer_id": "C1",
+        "event": "clear",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "exact",
+        "review_required": false,
+        "status": "recommend_allocation",
+        "candidate_invoice_ids": [
+          "I-101"
+        ],
+        "proposed_allocation_pence": 10000,
+        "remaining_pence": 0,
+        "policy_ids": [
+          "P1"
+        ]
+      }
+    },
+    {
+      "id": "A02",
+      "split": "development",
+      "input": {
+        "reference": "R-101",
+        "received_pence": 4000,
+        "currency": "GBP",
+        "customer_id": "C1",
+        "event": "clear",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "partial",
+        "review_required": false,
+        "status": "recommend_allocation",
+        "candidate_invoice_ids": [
+          "I-101"
+        ],
+        "proposed_allocation_pence": 4000,
+        "remaining_pence": 6000,
+        "policy_ids": [
+          "P1"
+        ]
+      }
+    },
+    {
+      "id": "A03",
+      "split": "development",
+      "input": {
+        "reference": "R-200",
+        "received_pence": 8000,
+        "currency": "GBP",
+        "customer_id": null,
+        "event": "clear",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "ambiguous",
+        "review_required": true,
+        "status": "awaiting_review",
+        "candidate_invoice_ids": [
+          "I-201",
+          "I-202"
+        ],
+        "proposed_allocation_pence": null,
+        "remaining_pence": null,
+        "policy_ids": [
+          "P2"
+        ]
+      }
+    },
+    {
+      "id": "A04",
+      "split": "development",
+      "input": {
+        "reference": "R-404",
+        "received_pence": 12000,
+        "currency": "GBP",
+        "customer_id": "C1",
+        "event": "clear",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "unknown",
+        "review_required": true,
+        "status": "awaiting_review",
+        "candidate_invoice_ids": [],
+        "proposed_allocation_pence": null,
+        "remaining_pence": null,
+        "policy_ids": [
+          "P2"
+        ]
+      }
+    },
+    {
+      "id": "A05",
+      "split": "development",
+      "input": {
+        "reference": "R-401",
+        "received_pence": 5000,
+        "currency": "GBP",
+        "customer_id": "C2",
+        "event": "disputed",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "dispute",
+        "review_required": true,
+        "status": "awaiting_review",
+        "candidate_invoice_ids": [
+          "I-401"
+        ],
+        "proposed_allocation_pence": null,
+        "remaining_pence": null,
+        "policy_ids": [
+          "P3"
+        ]
+      }
+    },
+    {
+      "id": "A06",
+      "split": "development",
+      "input": {
+        "reference": "R-101",
+        "received_pence": 10000,
+        "currency": "GBP",
+        "customer_id": "C1",
+        "event": "clear",
+        "ledger_tool": "timeout"
+      },
+      "expected": {
+        "reason": "timeout",
+        "review_required": true,
+        "status": "awaiting_review",
+        "candidate_invoice_ids": [],
+        "proposed_allocation_pence": null,
+        "remaining_pence": null,
+        "policy_ids": [
+          "P4"
+        ]
+      }
+    },
+    {
+      "id": "A07",
+      "split": "development",
+      "input": {
+        "reference": "R-301",
+        "received_pence": 12500,
+        "currency": "GBP",
+        "customer_id": "C2",
+        "event": "duplicate",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "duplicate",
+        "review_required": true,
+        "status": "awaiting_review",
+        "candidate_invoice_ids": [],
+        "proposed_allocation_pence": null,
+        "remaining_pence": null,
+        "policy_ids": [
+          "P4"
+        ]
+      }
+    },
+    {
+      "id": "A08",
+      "split": "development",
+      "input": {
+        "reference": "R-101",
+        "received_pence": 10001,
+        "currency": "GBP",
+        "customer_id": "C1",
+        "event": "clear",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "overpayment",
+        "review_required": true,
+        "status": "awaiting_review",
+        "candidate_invoice_ids": [
+          "I-101"
+        ],
+        "proposed_allocation_pence": null,
+        "remaining_pence": null,
+        "policy_ids": [
+          "P3"
+        ]
+      }
+    },
+    {
+      "id": "A09",
+      "split": "development",
+      "input": {
+        "reference": "R-501",
+        "received_pence": 8400,
+        "currency": "GBP",
+        "customer_id": "C3",
+        "event": "clear",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "closed",
+        "review_required": true,
+        "status": "awaiting_review",
+        "candidate_invoice_ids": [
+          "I-501"
+        ],
+        "proposed_allocation_pence": null,
+        "remaining_pence": null,
+        "policy_ids": [
+          "P3"
+        ]
+      }
+    },
+    {
+      "id": "A10",
+      "split": "development",
+      "input": {
+        "reference": "R-101",
+        "received_pence": 10000,
+        "currency": "EUR",
+        "customer_id": "C1",
+        "event": "clear",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "currency",
+        "review_required": true,
+        "status": "awaiting_review",
+        "candidate_invoice_ids": [
+          "I-101"
+        ],
+        "proposed_allocation_pence": null,
+        "remaining_pence": null,
+        "policy_ids": [
+          "P3"
+        ]
+      }
+    },
+    {
+      "id": "A11",
+      "split": "development",
+      "input": {
+        "reference": "R-101",
+        "received_pence": 0,
+        "currency": "GBP",
+        "customer_id": "C1",
+        "event": "clear",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "invalid",
+        "review_required": true,
+        "status": "awaiting_review",
+        "candidate_invoice_ids": [],
+        "proposed_allocation_pence": null,
+        "remaining_pence": null,
+        "policy_ids": [
+          "P5"
+        ]
+      }
+    },
+    {
+      "id": "A12",
+      "split": "development",
+      "input": {
+        "reference": null,
+        "received_pence": 9000,
+        "currency": "GBP",
+        "customer_id": "C3",
+        "event": "clear",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "missing",
+        "review_required": true,
+        "status": "awaiting_review",
+        "candidate_invoice_ids": [],
+        "proposed_allocation_pence": null,
+        "remaining_pence": null,
+        "policy_ids": [
+          "P2"
+        ]
+      }
+    },
+    {
+      "id": "A13",
+      "split": "development",
+      "input": {
+        "reference": "R-301",
+        "received_pence": 12500,
+        "currency": "GBP",
+        "customer_id": "C1",
+        "event": "clear",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "customer_conflict",
+        "review_required": true,
+        "status": "awaiting_review",
+        "candidate_invoice_ids": [
+          "I-301"
+        ],
+        "proposed_allocation_pence": null,
+        "remaining_pence": null,
+        "policy_ids": [
+          "P3"
+        ]
+      }
+    },
+    {
+      "id": "A14",
+      "split": "development",
+      "input": {
+        "reference": "R-601",
+        "received_pence": 199,
+        "currency": "GBP",
+        "customer_id": "C4",
+        "event": "clear",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "exact",
+        "review_required": false,
+        "status": "recommend_allocation",
+        "candidate_invoice_ids": [
+          "I-601"
+        ],
+        "proposed_allocation_pence": 199,
+        "remaining_pence": 0,
+        "policy_ids": [
+          "P1"
+        ]
+      }
+    },
+    {
+      "id": "A15",
+      "split": "development",
+      "input": {
+        "reference": "R-701",
+        "received_pence": 8999,
+        "currency": "GBP",
+        "customer_id": "C3",
+        "event": "clear",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "partial",
+        "review_required": false,
+        "status": "recommend_allocation",
+        "candidate_invoice_ids": [
+          "I-701"
+        ],
+        "proposed_allocation_pence": 8999,
+        "remaining_pence": 1,
+        "policy_ids": [
+          "P1"
+        ]
+      }
+    },
+    {
+      "id": "A16",
+      "split": "development",
+      "input": {
+        "reference": "R-601",
+        "received_pence": 200,
+        "currency": "GBP",
+        "customer_id": "C4",
+        "event": "clear",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "overpayment",
+        "review_required": true,
+        "status": "awaiting_review",
+        "candidate_invoice_ids": [
+          "I-601"
+        ],
+        "proposed_allocation_pence": null,
+        "remaining_pence": null,
+        "policy_ids": [
+          "P3"
+        ]
+      }
+    },
+    {
+      "id": "A17",
+      "split": "development",
+      "input": {
+        "reference": "R-301",
+        "received_pence": 1,
+        "currency": "GBP",
+        "customer_id": "C2",
+        "event": "clear",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "partial",
+        "review_required": false,
+        "status": "recommend_allocation",
+        "candidate_invoice_ids": [
+          "I-301"
+        ],
+        "proposed_allocation_pence": 1,
+        "remaining_pence": 12499,
+        "policy_ids": [
+          "P1"
+        ]
+      }
+    },
+    {
+      "id": "A18",
+      "split": "holdout",
+      "input": {
+        "reference": "R-200",
+        "received_pence": 1,
+        "currency": "GBP",
+        "customer_id": null,
+        "event": "clear",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "ambiguous",
+        "review_required": true,
+        "status": "awaiting_review",
+        "candidate_invoice_ids": [
+          "I-201",
+          "I-202"
+        ],
+        "proposed_allocation_pence": null,
+        "remaining_pence": null,
+        "policy_ids": [
+          "P2"
+        ]
+      }
+    },
+    {
+      "id": "A19",
+      "split": "holdout",
+      "input": {
+        "reference": "R-801",
+        "received_pence": 3800,
+        "currency": "GBP",
+        "customer_id": "C4",
+        "event": "clear",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "exact",
+        "review_required": false,
+        "status": "recommend_allocation",
+        "candidate_invoice_ids": [
+          "I-801"
+        ],
+        "proposed_allocation_pence": 3800,
+        "remaining_pence": 0,
+        "policy_ids": [
+          "P1"
+        ]
+      }
+    },
+    {
+      "id": "A20",
+      "split": "holdout",
+      "input": {
+        "reference": "R-301",
+        "received_pence": 12500,
+        "currency": "GBP",
+        "customer_id": "C2",
+        "event": "clear",
+        "ledger_tool": "timeout"
+      },
+      "expected": {
+        "reason": "timeout",
+        "review_required": true,
+        "status": "awaiting_review",
+        "candidate_invoice_ids": [],
+        "proposed_allocation_pence": null,
+        "remaining_pence": null,
+        "policy_ids": [
+          "P4"
+        ]
+      }
+    },
+    {
+      "id": "A21",
+      "split": "holdout",
+      "input": {
+        "reference": "R-601",
+        "received_pence": -100,
+        "currency": "GBP",
+        "customer_id": "C4",
+        "event": "clear",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "invalid",
+        "review_required": true,
+        "status": "awaiting_review",
+        "candidate_invoice_ids": [],
+        "proposed_allocation_pence": null,
+        "remaining_pence": null,
+        "policy_ids": [
+          "P5"
+        ]
+      }
+    },
+    {
+      "id": "A22",
+      "split": "holdout",
+      "input": {
+        "reference": "R-101",
+        "received_pence": 10000,
+        "currency": "GBP",
+        "customer_id": "C1",
+        "event": "duplicate",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "duplicate",
+        "review_required": true,
+        "status": "awaiting_review",
+        "candidate_invoice_ids": [],
+        "proposed_allocation_pence": null,
+        "remaining_pence": null,
+        "policy_ids": [
+          "P4"
+        ]
+      }
+    },
+    {
+      "id": "A23",
+      "split": "holdout",
+      "input": {
+        "reference": "R-701",
+        "received_pence": 9000,
+        "currency": "USD",
+        "customer_id": "C3",
+        "event": "clear",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "currency",
+        "review_required": true,
+        "status": "awaiting_review",
+        "candidate_invoice_ids": [
+          "I-701"
+        ],
+        "proposed_allocation_pence": null,
+        "remaining_pence": null,
+        "policy_ids": [
+          "P3"
+        ]
+      }
+    },
+    {
+      "id": "A24",
+      "split": "holdout",
+      "input": {
+        "reference": "R-801",
+        "received_pence": 3800,
+        "currency": "GBP",
+        "customer_id": "C1",
+        "event": "clear",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "customer_conflict",
+        "review_required": true,
+        "status": "awaiting_review",
+        "candidate_invoice_ids": [
+          "I-801"
+        ],
+        "proposed_allocation_pence": null,
+        "remaining_pence": null,
+        "policy_ids": [
+          "P3"
+        ]
+      }
+    },
+    {
+      "id": "A25",
+      "split": "holdout",
+      "input": {
+        "reference": "R-401",
+        "received_pence": 2500,
+        "currency": "GBP",
+        "customer_id": "C2",
+        "event": "disputed",
+        "ledger_tool": "ok"
+      },
+      "expected": {
+        "reason": "dispute",
+        "review_required": true,
+        "status": "awaiting_review",
+        "candidate_invoice_ids": [
+          "I-401"
+        ],
+        "proposed_allocation_pence": null,
+        "remaining_pence": null,
+        "policy_ids": [
+          "P3"
+        ]
+      }
+    }
+  ]
+}
