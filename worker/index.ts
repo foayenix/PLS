@@ -1,9 +1,17 @@
 import handler from "vinext/server/fetch-handler";
 import { runWithConnectorBinding } from "../lib/connector-context";
+import { authenticateCloudflareRequest } from "../lib/cloudflare-access";
 import type { ConnectorBinding } from "../lib/connector-contract.mjs";
 
 const worker = {
-  fetch(request: Request, env: Cloudflare.Env, ctx: ExecutionContext<{ CONNECTORS?: ConnectorBinding }>) {
+  async fetch(request: Request, env: Cloudflare.Env, ctx: ExecutionContext<{ CONNECTORS?: ConnectorBinding }>) {
+    if (env.FIELDWORK_HOST === "cloudflare") {
+      const verified = await authenticateCloudflareRequest(request, env.FIELDWORK_ACCESS_TEAM_DOMAIN, env.FIELDWORK_ACCESS_AUD);
+      if (!verified) return new Response("Sign in through Cloudflare Access to open Fieldwork.", { status: 401 });
+      request = verified;
+      const url = new URL(request.url);
+      if (url.pathname === "/signin-with-chatgpt") return Response.redirect(new URL("/", url), 302);
+    }
     let binding = ctx.props?.CONNECTORS;
     // Local preview emulates the same request-scoped capability. This branch and
     // the auxiliary service binding are absent from production builds.

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f4eb">
+  <meta name="description" content="Short AI engineering flashcards and debugging drills from Fieldwork.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Quick Practice · Fieldwork</title>
+  <link rel="manifest" href="/practice/manifest.webmanifest">
+  <link rel="icon" href="/practice/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="/practice/icon-192.png">
+  <link rel="stylesheet" href="/practice/practice.css">
+</head>
+<body>
+  <main class="app">
+    <header class="masthead">
+      <a class="brand" href="/" aria-label="Fieldwork learning studio"><span aria-hidden="true">✳</span> fieldwork.</a>
+      <span id="sync" class="sync" role="status">Checking progress…</span>
+    </header>
+    <section id="start" class="panel">
+      <h1>Quick Practice</h1>
+      <p class="lede">A few questions on the train or between meetings.</p>
+      <div class="stats" aria-label="Practice history">
+        <div><strong id="due">0</strong><span>Due to review</span></div>
+        <div><strong id="today">0</strong><span>Answered today</span></div>
+      </div>
+      <fieldset class="segmented">
+        <legend>Practice type</legend>
+        <label><input type="radio" name="mode" value="mixed" checked><span>Mixed</span></label>
+        <label><input type="radio" name="mode" value="flash"><span>Flashcards</span></label>
+        <label><input type="radio" name="mode" value="debug"><span>Debugging</span></label>
+      </fieldset>
+      <fieldset class="segmented lengths">
+        <legend>Session length</legend>
+        <label><input type="radio" name="length" value="3" checked><span>3 cards</span></label>
+        <label><input type="radio" name="length" value="5"><span>5 cards</span></label>
+        <label><input type="radio" name="length" value="10"><span>10 cards</span></label>
+      </fieldset>
+      <button class="primary full" id="begin">Start practice <span aria-hidden="true">→</span></button>
+    </section>
+    <section id="session" class="panel" hidden>
+      <div class="card-meta"><span id="topic"></span><span id="position"></span></div>
+      <progress id="progress" value="0" max="3" aria-label="Session progress"></progress>
+      <div class="card-heading">
+        <h1 id="prompt" tabindex="-1"></h1>
+        <p id="scenario" class="scenario" hidden></p>
+      </div>
+      <div id="choices" class="choices"></div>
+      <div id="answer" class="answer" aria-live="polite" hidden><strong id="answer-title"></strong><p id="answer-copy"></p></div>
+      <button class="primary full" id="reveal">Reveal answer</button>
+      <div id="rating" class="rating" hidden>
+        <button class="secondary" id="again">Practise again</button>
+        <button class="primary" id="knew">I knew it</button>
+      </div>
+      <button class="primary full" id="next" hidden>Next question <span aria-hidden="true">→</span></button>
+      <button class="text-button exit" id="exit">End session</button>
+    </section>
+    <section id="summary" class="panel" hidden>
+      <h1 tabindex="-1" id="summary-heading">Session complete</h1>
+      <p class="lede" id="summary-copy"></p>
+      <button class="primary full" id="restart">Practice again <span aria-hidden="true">→</span></button>
+    </section>
+    <footer>
+      <details id="install-help">
+        <summary>Install for quick access</summary>
+        <p id="install-copy">On iPhone, use Safari’s Share menu and choose Add to Home Screen. On Android or desktop, use Install app in your browser menu.</p>
+        <button class="secondary install" id="install" hidden>Install Quick Practice</button>
+        <p id="offline" role="status">Open this page online once to enable offline practice.</p>
+      </details>
+      <a href="/">Open the full learning studio ↗</a>
+    </footer>
+  </main>
+  <script type="module" src="/practice/practice.js"></script>
+</body>
+</html>

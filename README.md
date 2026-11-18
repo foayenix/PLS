@@ -42,3 +42,19 @@ Use the supplied Sites workflow. Dependencies are managed with pnpm. Run `npm ru
 The host supplies authenticated identity. `/api/records` requires that identity, scopes each query by user ID, checks mutation origins and limits record size. Never add a production identity bypass. Local browser preview may show a device copy when hosted identity is unavailable.
 
 Source course files are static assets under `public/course-content/`. `lib/course.json` contains the source catalog and personal route. No runtime request to GitHub is needed to read lessons.
+
+## Quick Practice
+
+Open `/practice/` for short flashcard, debugging or mixed sessions. The 32 original questions are available offline after the first online visit. Only the practice app shell is cached by its service worker. Attempts are saved on the device while offline and synced to the signed-in account when it reconnects. Phone and desktop can use the same account on the same hosting URL.
+
+## Deploy to your own Cloudflare account
+
+Fieldwork uses a Cloudflare Worker and D1. These steps create a separate deployment and database. To move your existing progress, use Fieldwork's JSON backup and restore with your new signed-in account.
+
+1. Sign in with `npx wrangler login`. Create a D1 database named `fieldwork` with `npx wrangler d1 create fieldwork`. Apply the SQL migrations in `drizzle/` or use the migration command below.
+2. Set up a Cloudflare Access application protecting the production Worker hostname. Give access to the email addresses you want to use. Record its team domain, such as `example.cloudflareaccess.com`, and the application's audience tag.
+3. Run your normal install and build commands. Set `FIELDWORK_D1_DATABASE_ID`, `FIELDWORK_ACCESS_TEAM_DOMAIN` and `FIELDWORK_ACCESS_AUD` in your shell and run `node scripts/configure-cloudflare.mjs`. Set `FIELDWORK_WORKER_NAME` and `FIELDWORK_D1_DATABASE_NAME` if you chose different names.
+4. Run `npx wrangler d1 migrations apply DB --remote --config dist/server/wrangler.cloudflare.json`, then `npx wrangler deploy --config dist/server/wrangler.cloudflare.json`.
+5. Verify that an unsigned request to `/api/records` is blocked. Sign in on your phone and a desktop, complete one practice question, and verify it syncs. Open Quick Practice once online before trying it offline.
+
+The standalone Worker validates the signed Access assertion and converts the verified identity to Fieldwork's internal user record. Protect the entire Worker hostname with Access to cover its static assets.
