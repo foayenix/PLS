@@ -4,12 +4,13 @@ import { automationProjects } from './automation-projects';
 import type { RoleRequirement } from './career';
 import { roboticsProjects } from './robotics';
 import type { TutorProgress } from './tutor';
+import type { CodeWalkthrough } from './code-walkthrough';
 export type Entry = {
   completed?: boolean; note?: string; reflection?: string; checks?: string[];
   minutes?: number; date?: string; weeklyGoal?: number; sessionLength?: number;
   url?: string; summary?: string; confidence?: string; quizAnswers?: number[];
   startedOn?: string; practiceMinutes?: number; progressPercent?: number; roleDescription?: string; requirements?: RoleRequirement[]; elapsedSeconds?: number;
-  title?: string; bookmarked?: boolean; activeProject?: string; demoUrl?: string; reportUrl?: string; buildSessions?: string[]; valueNotes?: string; tutor?: TutorProgress;
+  title?: string; bookmarked?: boolean; activeProject?: string; demoUrl?: string; reportUrl?: string; buildSessions?: string[]; valueNotes?: string; tutor?: TutorProgress; walkthrough?: CodeWalkthrough;
 };
 export type Records = Record<string,Entry>;
 export type Project = {id:string;name:string;tag:string;color:string;description:string;applies:string;brief:string;checks:string[];track?:'AI'|'Security'|'Robotics';level?:string;prerequisites?:string[];milestones?:string[];sources?:{title:string;url:string}[];evidenceBundle?:boolean;original?:boolean;skills?:string[];valueTest?:string;buildSessions?:{title:string;steps:string[];doneWhen:string}[]};

@@ -41,6 +41,12 @@ The host supplies authenticated identity. `/api/records` requires that identity,
 
 Source course files are static assets under `public/course-content/`. `lib/course.json` contains the source catalog and personal route. No runtime request to GitHub is needed to read lessons.
 
+## AI-assisted coding
+
+Open any Project Lab brief and find **Code walkthrough**. Scope one change in plain English and copy a build prompt for your coding assistant. After it makes the patch, point to the commit or changed files. Trace one input, explain a failure case and copy a teach-back prompt if you want a coaching session with your assistant.
+
+Make one small edit or write one test yourself in your development environment. Save your prediction, reproduction command and result. Draft and completed walkthroughs are saved per project with Fieldwork records and backups. The walkthrough is self-assessed. A concept you are unsure about can open a related study session directly in Study Tutor.
+
 ## Quick Practice
 
 Open `/practice/` for short flashcard, debugging or mixed sessions. The 59 original questions across AI engineering and robotics are available offline after the first online visit. Only the practice app shell is cached by its service worker. Attempts are saved on the device while offline and synced to the signed-in account when it reconnects. Phone and desktop can use the same account on the same hosting URL.

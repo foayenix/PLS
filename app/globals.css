@@ -200,3 +200,20 @@
 .robotics-question { min-width: 0; }
 .robotics-question legend { font-weight: 700; padding: 0 4px; }
 .robotics-question > p { margin: 0 0 9px; }
+
+/* Code walkthroughs */
+.code-walkthrough { margin: 22px 0; }
+.walkthrough-heading { display: flex; align-items: flex-start; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+.walkthrough-heading h3 { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
+.walkthrough-heading p, .walkthrough-form p { font-size: 1rem; margin: 0; }
+.walkthrough-history, .walkthrough-form { margin-top: 17px; }
+.walkthrough-form, .walkthrough-concept { display: grid; gap: 9px; }
+.walkthrough-form h4 { font-size: 1.125rem; margin: 8px 0 0; }
+.walkthrough-form label { font-size: .9375rem; font-weight: 650; }
+.walkthrough-history select, .walkthrough-form input, .walkthrough-form textarea { width: 100%; font-size: 1rem; }
+.walkthrough-form textarea { resize: vertical; }
+.walkthrough-form > .button, .walkthrough-concept > .button { justify-self: start; }
+.walkthrough-concept { margin-top: 11px; }
+.walkthrough-result { margin: 0; font-size: 1rem; }
+.walkthrough-result dt { font-weight: 700; margin-top: 11px; }
+.walkthrough-result dd { margin: 2px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }

@@ -124,7 +124,12 @@ export function planQuestion(question: string): TutorPlan {
   const query = ' ' + normalize(question) + ' ';
   const ranked = templates.map(template => ({
     id: template.id,
-    score: template.terms.reduce((sum, term) => sum + (query.includes(' ' + normalize(term) + ' ') ? (normalize(term).includes(' ') ? 5 : 2) : 0), 0),
+    score: template.terms.reduce((sum, term) => {
+      const phrase = normalize(term);
+      if (!query.includes(' ' + phrase + ' ')) return sum;
+      if (phrase === 'ros 2' || phrase === 'ros2') return sum + 1;
+      return sum + (phrase.includes(' ') ? 5 : 2);
+    }, 0),
   })).sort((a, b) => b.score - a.score);
   if (ranked[0].score > 0) {
     const plan = templatePlan(ranked[0].id);
