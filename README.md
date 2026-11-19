@@ -1,6 +1,6 @@
 # Fieldwork — Felix’s AI Learning Studio
 
-A personal learning portal for applied AI engineering.
+A personal learning portal for applied AI engineering and mobile robotics.
 
 ## What works
 
@@ -10,17 +10,17 @@ A personal learning portal for applied AI engineering.
 - Source quizzes for the path lessons where the upstream repository provides one.
 - Bookmarks, lesson completion, notes and reflections.
 - A 12-checkpoint security foundations track with original guides, exercises, recall questions, bookmarks, notes and progress.
-- Twenty project briefs, including ten original builds designed around Felix’s work: invoice reconciliation, Sanko corrections, booking changes, code-change test mapping, evidence freshness and agent permissions.
+- Twenty-three project briefs, including three mobile robotics projects and ten original AI builds designed around Felix’s work: invoice reconciliation, Sanko corrections, booking changes, code-change test mapping, evidence freshness and agent permissions.
 - The original builds have four practical sessions each, explicit finish criteria, follow-on milestones, skills and a value test. Session completion and observed value/feedback are stored in the existing project record.
 - New-project evidence bundles (repository, demo, report and case-study notes), one active project, Markdown case-study export and copyable post drafts. Original builds also require value-test notes before the evidence bundle is marked ready.
 - A reference shelf linking all five user-selected security and AI repositories, with guidance on how to use each.
-- Career Studio with a six-week applied AI roadmap, Azure and business analysis resources, timed interview drills, a reusable job requirement board with optional role templates, and an eleven-course schedule calculator. The AI automation track includes a UK role skills matrix, three project briefs and downloadable synthetic practice cases. Career records use the existing authenticated storage and backup format.
+- Career Studio with a December 2027 mobile robotics roadmap, a six-week applied AI roadmap, Azure and business analysis resources, timed interview drills, a reusable job requirement board with optional role templates, and an eleven-course schedule calculator. The AI automation track includes a UK role skills matrix, three project briefs and downloadable synthetic practice cases. Career records use the existing authenticated storage and backup format.
 - Five personally supplied Udemy outlines with searchable lecture titles and timings, per-lecture progress, a guided route linked to Fieldwork lessons and project briefs, and optional schedule progress updates.
 - Focus timer, real study-session log and an editable weekly study intention.
 - User-scoped Cloudflare D1 records, with a browser queue for interrupted saves.
 - JSON backup/restore and Markdown note export.
 
-Course completion and project checks are self-reported. The portal does not execute learner code. Tutor assistance copies a prompt for use in an external AI assistant; it is not a built-in model integration.
+Course completion and project checks are self-reported. The portal does not execute learner code. Study Tutor finds Fieldwork lessons and builds guided sessions with predictions, evidence and recall. The optional model provider can draft additional exercises. The tutor uses self-assessed rubrics.
 
 ## Source attribution
 
@@ -35,8 +35,6 @@ Security guides in `lib/security.ts` and the original project briefs in `lib/pra
 
 ## Development
 
-This source export includes the learning material and project briefs. Local configuration is provided in .openai/hosting.json. For a new hosted Site, supply your own Site project ID and bind Cloudflare D1 as DB. User progress starts fresh in this checkout.
-
 Use the supplied Sites workflow. Dependencies are managed with pnpm. Run `npm run dev` for a local development server, `npm run db:generate` after a schema change, and `npm run build` for the deployable Worker. D1 migrations are under `drizzle/`.
 
 The host supplies authenticated identity. `/api/records` requires that identity, scopes each query by user ID, checks mutation origins and limits record size. Never add a production identity bypass. Local browser preview may show a device copy when hosted identity is unavailable.
@@ -45,7 +43,18 @@ Source course files are static assets under `public/course-content/`. `lib/cours
 
 ## Quick Practice
 
-Open `/practice/` for short flashcard, debugging or mixed sessions. The 32 original questions are available offline after the first online visit. Only the practice app shell is cached by its service worker. Attempts are saved on the device while offline and synced to the signed-in account when it reconnects. Phone and desktop can use the same account on the same hosting URL.
+Open `/practice/` for short flashcard, debugging or mixed sessions. The 59 original questions across AI engineering and robotics are available offline after the first online visit. Only the practice app shell is cached by its service worker. Attempts are saved on the device while offline and synced to the signed-in account when it reconnects. Phone and desktop can use the same account on the same hosting URL.
+
+## Study Tutor
+
+Open Study Tutor and enter a question. Fieldwork first looks for a guided exercise or a relevant lesson. Predict what the example will do, run a small exercise, record your evidence and explain the result from memory. You can save a draft, resume a session and log study time. The guided tutor works without model credentials.
+
+### Optional model-assisted plans
+
+For questions outside the guided lessons, the tutor can ask a configured model to draft a second exercise. It runs only when you click **Generate a guided plan** and receives the question and matched lesson titles. The lesson links and project references come from Fieldwork.
+
+- **Ollama on a laptop.** Install [Ollama](https://ollama.com/download) and pull a model that supports [structured outputs](https://docs.ollama.com/capabilities/structured-outputs). Run Ollama on its default loopback address. Create a local, untracked `.dev.vars` file at the root with `FIELDWORK_OLLAMA_MODEL=<your-installed-model>`. Run `npm run dev`, then open the local address using `localhost` or `127.0.0.1`. Use the local copy to generate plans. The hosted site does not call the laptop.
+- **OpenAI on a hosted copy.** Set `OPENAI_API_KEY` as a server secret and `FIELDWORK_OPENAI_MODEL` to a model that supports [Structured Outputs on the Responses API](https://developers.openai.com/api/docs/guides/structured-outputs). Configure model access only on a private deployment. ChatGPT sign-in saves progress. OpenAI API usage uses separate API billing.
 
 ## Deploy to your own Cloudflare account
 

@@ -1,10 +1,11 @@
-const CACHE = 'fieldwork-quick-practice-v1';
+const CACHE = 'fieldwork-quick-practice-v2';
 const HOME = '/practice/';
 const assets = [
   HOME,
   '/practice/practice.css',
   '/practice/practice.js',
   '/practice/cards.js',
+  '/practice/robotics.js',
   '/practice/review.js',
   '/practice/manifest.webmanifest',
   '/practice/icon-192.png',

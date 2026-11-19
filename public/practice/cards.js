@@ -1,3 +1,5 @@
+import { roboticsCards } from './robotics.js';
+
 const flashcards = [
   ['api-timeout', 'Python & APIs', 'What belongs around an external API call?', 'A timeout, explicit error handling and a safe retry policy where applicable.', 'Bound how long you wait and give the caller a useful failure state.'],
   ['status-codes', 'Python & APIs', 'How do HTTP 401 and 403 differ?', '401 means authentication is missing or invalid. 403 means the request lacks permission.', 'Changing API permissions will not fix an expired token that caused a 401.'],
@@ -37,6 +39,7 @@ const debugging = [
 ];
 
 export const cards = [
-  ...flashcards.map(([id, topic, prompt, answer, explanation]) => ({ id, topic, kind: 'flash', prompt, answer, explanation })),
-  ...debugging.map(([id, topic, title, prompt, choices, correct, explanation]) => ({ id, topic, kind: 'debug', title, prompt, choices, correct, explanation })),
+  ...flashcards.map(([id, topic, prompt, answer, explanation]) => ({ id, topic, track: 'ai', kind: 'flash', prompt, answer, explanation })),
+  ...debugging.map(([id, topic, title, prompt, choices, correct, explanation]) => ({ id, topic, track: 'ai', kind: 'debug', title, prompt, choices, correct, explanation })),
+  ...roboticsCards,
 ];

@@ -6,6 +6,8 @@ import { careerSources, coursePlan, defaultPlan, drills, finishDate, formatPlanD
 import { automationDrills } from '@/lib/automation';
 import AutomationStudio from './automation-studio';
 import SyllabusStudio from './syllabus-studio';
+import RoboticsStudio from './robotics-studio';
+import { roboticsDrills, roboticsMilestones } from '@/lib/robotics';
 import { isSyllabusCourse, type SyllabusId, type SyllabusSelection } from '@/lib/udemy-syllabus';
 import type { Entry, Records } from '@/lib/practice';
 
@@ -15,12 +17,14 @@ type StudioProps = {
   notify: (message: string) => void;
   openProject: (id: string) => void;
   openPath: () => void;
-  initialTab?: 'syllabus' | 'interviews';
+  openTutor: (id: string) => void;
+  initialTab?: 'syllabus' | 'interviews' | 'robotics';
   watchList?: SyllabusSelection;
 };
 
 const tabs = [
-  ['roadmap', 'Portfolio plan'],
+  ['robotics', 'Robotics roadmap'],
+  ['roadmap', 'AI portfolio plan'],
   ['practice', 'Practical work'],
   ['automation', 'AI automation'],
   ['interviews', 'Interview practice'],
@@ -32,19 +36,20 @@ const tabs = [
 type Tab = typeof tabs[number][0];
 
 export default function CareerStudio(props: StudioProps) {
-  const [tab, setTab] = useState<Tab>(props.initialTab || 'roadmap');
+  const [tab, setTab] = useState<Tab>(props.initialTab || 'robotics');
   const [syllabusCourse, setSyllabusCourse] = useState<SyllabusId>();
   const [watchList, setWatchList] = useState(props.watchList);
   const [interviewDrill, setInterviewDrill] = useState<string>(drills[0].id);
-  const done = roadmap.filter(week => props.records['career:week/' + week.id]?.completed).length;
+  const done = roboticsMilestones.filter(milestone => props.records['career:robotics/' + milestone.id]?.completed).length;
   return <div className="career-studio">
     <div className="page-heading">
-      <div><div className="eyebrow">CAREER STUDIO</div><h1>Become a stronger AI engineer.</h1><p>Build, test and explain real workflows. Use the same evidence in interviews and contract conversations.</p></div>
-      <div className="path-total"><strong>{done}<span>/{roadmap.length}</span></strong><small>roadmap milestones</small></div>
+      <div><div className="eyebrow">CAREER STUDIO</div><h1>Your path to robotics.</h1><p>Work towards a mobile robotics software role by December 2027. Keep applied AI and automation as your first route into engineering work.</p></div>
+      <div className="path-total"><strong>{done}<span>/{roboticsMilestones.length}</span></strong><small>robotics milestones</small></div>
     </div>
     <nav className="career-tabs" aria-label="Career Studio sections">
       {tabs.map(([id, label]) => <button type="button" key={id} aria-pressed={tab === id} onClick={() => { setSyllabusCourse(undefined); setWatchList(undefined); setTab(id); }}>{label}</button>)}
     </nav>
+    {tab === 'robotics' && <RoboticsStudio {...props}/>}
     {tab === 'roadmap' && <Roadmap {...props} onPractice={() => setTab('practice')}/>}
     {tab === 'practice' && <PracticalWork openProject={props.openProject}/>}
     {tab === 'automation' && <AutomationStudio {...props} openInterviews={() => { setInterviewDrill(automationDrills[0].id); setTab('interviews'); }} openBoard={() => setTab('contracts')}/>}
@@ -108,7 +113,7 @@ function PracticalWork({ openProject }: Pick<StudioProps, 'openProject'>) {
   </>;
 }
 
-const interviewDrills = [...drills, ...automationDrills];
+const interviewDrills = [...drills, ...automationDrills, ...roboticsDrills];
 
 function InterviewPractice({ records, save, notify, openProject, selected, setSelected }: StudioProps & { selected: string; setSelected: (id: string) => void }) {
   const drill = interviewDrills.find(item => item.id === selected) || interviewDrills[0];

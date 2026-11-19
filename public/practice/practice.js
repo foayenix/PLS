@@ -127,7 +127,9 @@ function saveAnswer(card, recalled) {
 function begin() {
   const mode = document.querySelector('input[name=mode]:checked').value;
   const length = Number(document.querySelector('input[name=length]:checked').value);
-  currentSession = chooseCards(cards, reviewState(attempts()), mode, length, Date.now());
+  const track = document.querySelector('input[name=track]:checked').value;
+  const pool = track === 'all' ? cards : cards.filter(card => card.track === track);
+  currentSession = chooseCards(pool, reviewState(attempts()), mode, length, Date.now());
   index = 0;
   correct = 0;
   show('session');
@@ -243,5 +245,9 @@ if ('serviceWorker' in navigator) {
 window.addEventListener('online', () => void syncProgress());
 window.addEventListener('offline', () => { get('sync').textContent = 'Offline · saved on device'; });
 window.addEventListener('focus', () => void syncProgress());
+const requestedTrack = new URLSearchParams(location.search).get('track');
+for (const input of document.querySelectorAll('input[name=track]')) {
+  if (input.value === requestedTrack) input.checked = true;
+}
 readCachedProgress();
 void syncProgress();

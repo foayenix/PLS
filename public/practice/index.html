@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f4f4eb">
-  <meta name="description" content="Short AI engineering flashcards and debugging drills from Fieldwork.">
+  <meta name="description" content="Short AI engineering and robotics flashcards and debugging drills from Fieldwork.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Quick Practice · Fieldwork</title>
   <link rel="manifest" href="/practice/manifest.webmanifest">
@@ -25,6 +25,12 @@
         <div><strong id="due">0</strong><span>Due to review</span></div>
         <div><strong id="today">0</strong><span>Answered today</span></div>
       </div>
+      <fieldset class="segmented">
+        <legend>Topic</legend>
+        <label><input type="radio" name="track" value="all" checked><span>All topics</span></label>
+        <label><input type="radio" name="track" value="ai"><span>AI engineering</span></label>
+        <label><input type="radio" name="track" value="robotics"><span>Robotics</span></label>
+      </fieldset>
       <fieldset class="segmented">
         <legend>Practice type</legend>
         <label><input type="radio" name="mode" value="mixed" checked><span>Mixed</span></label>

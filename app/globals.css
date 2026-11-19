@@ -164,3 +164,39 @@
 @media(max-width:650px){.learning-path-intro .path-video-total{border-left:0;border-top:1px solid #d7dfcc;padding:8px 0 0}.ascent-list>li{gap:7px}}
 
 .career-path-link{margin-top:9px}
+
+/* Guided study and robotics */
+.study-tutor { max-width: 950px; }
+.tutor-question, .tutor-plan, .tutor-provider { display: grid; gap: 16px; }
+.tutor-question textarea, .tutor-plan textarea { width: 100%; resize: vertical; }
+.tutor-question > .button, .tutor-provider > .button { justify-self: start; }
+.tutor-examples, .tutor-links { display: flex; flex-wrap: wrap; gap: 10px; }
+.tutor-examples .button { white-space: normal; text-align: left; }
+.tutor-back { margin-bottom: 12px; }
+.tutor-plan header h2, .tutor-plan h3 { margin: 0; }
+.tutor-plan header p, .tutor-provider p { margin: 6px 0 0; }
+.tutor-plan .input-label { margin: 0; }
+.tutor-plan .career-inset { margin: 0; }
+.tutor-steps { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 0; margin: 0; list-style: none; }
+.tutor-steps li { display: flex; align-items: center; gap: 6px; font-weight: 500; }
+.tutor-steps li span { display: grid; place-items: center; border-radius: 100%; width: 24px; height: 24px; background: #e8ece5; color: #30483b; font-size: .875rem; }
+.tutor-steps .current { font-weight: 750; }
+.tutor-steps .current span { background: #315649; color: #fff; }
+.tutor-prediction { background: #eef1eb; border-radius: 9px; padding: 12px 14px; white-space: pre-wrap; }
+.tutor-prediction strong { display: block; margin-bottom: 4px; }
+.tutor-plan details summary, .robotics-quiz summary { cursor: pointer; }
+.tutor-plan details summary svg, .robotics-quiz summary svg { display: inline-block; vertical-align: text-bottom; margin-right: 7px; }
+.tutor-finish dt { font-weight: 700; margin-top: 14px; }
+.tutor-finish dd { margin: 4px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.tutor-provider, .robotics-quiz, .tutor-history { margin-top: 20px; }
+.tutor-history-card { display: grid; gap: 6px; text-align: left; color: inherit; overflow-wrap: anywhere; }
+.tutor-history-card[aria-current] { outline: 2px solid #437873; outline-offset: -2px; }
+.tutor-history-card span { font-size: .875rem; }
+.robotics-feature { margin-bottom: 18px; }
+.robotics-quiz { margin-bottom: 22px; }
+.robotics-quiz summary { font-size: 1.125rem; font-weight: 700; }
+.robotics-quiz .career-tabs { margin-top: 12px; }
+.robotics-quiz .quiz-questions { margin-bottom: 16px; }
+.robotics-question { min-width: 0; }
+.robotics-question legend { font-weight: 700; padding: 0 4px; }
+.robotics-question > p { margin: 0 0 9px; }
